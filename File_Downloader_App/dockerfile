@@ -1,0 +1,66 @@
+# base image
+FROM python:3.7
+
+# streamlit-specific commands
+RUN mkdir -p /root/.streamlit
+RUN bash -c 'echo -e "\
+[general]\n\
+email = \"\"\n\
+" > /root/.streamlit/credentials.toml'
+RUN bash -c 'echo -e "\
+[server]\n\
+enableCORS = false\n\
+" > /root/.streamlit/config.toml'
+
+# exposing default port for streamlit
+EXPOSE 8501
+
+# copy over and install packages
+COPY requirements.txt ./requirements.txt
+# RUN pip3 install -r requirements.txt
+RUN pip install sklearn
+RUN pip install pandas
+RUN pip install numpy
+RUN pip install streamlit
+RUN pip install sweetviz
+RUN pip install pandas_profiling
+RUN pip install streamlit_pandas_profiling
+RUN pip install matplotlib
+RUN pip install seaborn
+# copying everything over
+COPY . .
+
+# run app
+CMD ["streamlit", "run","app.py"]
+#--------------------------------------------
+# FROM python:3.7.0
+
+# ADD . /app
+
+# RUN apt-get update -y
+# RUN apt-get install -y software-properties-common
+# RUN apt-get install -y python-pip
+# RUN pip install --upgrade pip
+# # RUN pip install -r /app/requirements.txt
+# RUN pip install pandas sweetviz streamlit numpy
+
+# ENV LC_ALL=C.UTF-8
+# ENV LANG=C.UTF-8
+
+# RUN mkdir -p /root/.streamlit
+
+# RUN bash -c 'echo -e "\
+# [general]\n\
+# email = \"\"\n\
+# " > /root/.streamlit/credentials.toml'
+
+# RUN bash -c 'echo -e "\
+# [server]\n\
+# enableCORS = false\n\
+# " > /root/.streamlit/config.toml'
+
+# EXPOSE  8501
+
+# WORKDIR /app
+
+# CMD [ "streamlit", "run", "app.py"]
